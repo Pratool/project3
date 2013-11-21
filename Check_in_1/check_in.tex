@@ -1,0 +1,114 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%General Purpose Lab Report
+%Created by your friendly neighborhood MODCON NINJA
+%
+%Note: if the lab report asks you to install packages, just click yes!  
+%
+%This template is to be used for lab reports, specifically for MODCON, but with appropriate format changes for other classes.  If you have any questions about how to use this template first, actually read the comments (which are these red lnes marked by percentages), and if those don't do it for ya, contact your ninja for some advice/help.  
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%----------------------------------------------------------------------------------------
+% PACKAGES, CONFIGURATIONS, AND FORMATTING - OH MY!
+%----------------------------------------------------------------------------------------
+
+%This line establishes what type of document this is, and saves it as that formatting class
+\documentclass[11pt]{article} %Larger font for us old folks please!  10pt is the default
+
+
+%These are packages which make your document look fancy!  And also format it to look nice.  You want these.  We want to see these.  Pretty lab reports are the gateway to organization....its up to you for the content though!
+\usepackage{fancyhdr} % Required for custom headers
+\usepackage{lastpage} % Required to determine the last page for the footer
+\usepackage{extramarks} % Required for headers and footers
+\usepackage{graphicx} % Required to insert images
+\usepackage{amsmath} % Allows you to do mathy things
+%\usepackage{hyperref} %Allows you to reference figures and page numbers throughout the document directly
+
+% Margins - this happens to be the margins I like, but feel free to adjust to your taste within reason
+\topmargin=-0.45in
+\evensidemargin=0in
+\oddsidemargin=0in
+\textwidth=6.5in
+\textheight=9.0in
+\headsep=0.25in 
+
+\linespread{1.1} % Line spacing
+
+% Set up the header and footer - this is all fancy stuff to just make a nice looking page topper.  Adjust to what you would like, but leave the varibale names
+\pagestyle{fancy}
+%\lhead{\hmwkAuthorName} % Top left header
+%\chead{\hmwkClass : \hmwkTitle} % Top center header
+%\rhead{\firstxmark} % Top right header
+\lfoot{\lastxmark} % Bottom left footer
+\cfoot{} % Bottom center footer
+%\rfoot{Page\ \thepage\ of\ \
+\rfoot{Page\ \thepage\ of\ \pageref{LastPage}} % Bottom right footer
+\renewcommand\headrulewidth{0.4pt} % Size of the header rule
+\renewcommand\footrulewidth{0.4pt} % Size of the footer rule
+
+\setlength\parindent{0pt} % Removes all indentation from paragraphs
+
+   
+%----------------------------------------------------------------------------------------
+%NAME AND CLASS SECTION PLEASE
+%----------------------------------------------------------------------------------------
+
+\newcommand{\hmwkTitle}{Project Check-In} % Assignment title
+\newcommand{\hmwkDueDate}{November 21, 2013} % Due date
+\newcommand{\hmwkClass}{Modeling and Simulation of the Physical World} % Course/class
+\newcommand{\hmwkAuthorName}{Pratool Gadtaula and Zoher Ghadyali} % Your name
+
+%----------------------------------------------------------------------------------------
+%TITLE PAGE - If you're into that
+%----------------------------------------------------------------------------------------
+
+\title{
+\vspace{2in}
+\textmd{\textbf{\hmwkClass:\ \hmwkTitle}}\\
+\normalsize\vspace{0.1in}\small{Due\ on\ \hmwkDueDate}\\
+\vspace{3in}
+}
+
+\author{\textbf{\hmwkAuthorName}}
+\date{} % Insert date here if you want it to appear below your name
+
+%----------------------------------------------------------------------------------------
+% LET'S GET READY TO RUMBLE
+%-----------------------------------------------------------------------------------------
+
+\begin{document}
+
+\maketitle 
+\vspace{1in} %this command controls spacing, and allows you to really dig in to personalizing your template
+%\begin{abstract}
+%\LaTeX is a typesetting language - think that it's like Word, only you now control the formatting end of it yourself.  This tool will help you to create super sexy reports quickly and easily - but it'll take a little work on the front end for you to do this.  
+%\end{abstract}
+\newpage %be sure to include this to let the title be on a seperate page; comment this out if you would prefere to have it at the top of your first page, but it will take a little playing with your formatting to make it look alright
+
+\section*{Equations}
+
+\begin{align*}
+\Sigma F &=ma \\
+\vec{F}_{thrust} + \vec{F}_{lift} + \vec{F}_{drag} + m\vec{g} &= m\vec{a} \\
+m\frac{d\vec{v}}{dt} &= \vec{F}_{thrust} + \frac{1}{2}C_l\rho A v^2\hat{s} - \frac{1}{2}C_D\rho A v^2 \hat{v} - mg\hat{j} \\
+\frac{d\vec{p}}{dt} &= \vec{v}
+\end{align*}
+
+\section*{Graph} % \\ is a shortcut for newline, but you get an error that there is nothing in the line, so \ puts a space in.
+
+\ \\ \\ \\ \\ \\ \\ \\ \\ \\ \\ \\ \\ \\ \\ \\ \\ \\ \\
+
+\begin{figure}[h!]
+\begin{center}
+\caption{Trajectory of a typical zero-gravity aircraft}
+\label{fig:figure1}
+\end{center}
+\end{figure}
+
+\section*{Iterations}
+This model is our first iteration. Most zero-gravity aircrafts travel for greater than 15 parabolic free-falls. We have modeled only one free-falll so far. We will also be operating in a third dimension in order to vary the flight path. The flight path will be elliptical when taken from a bird's eye view. The eccentricity of this ellipse will change between 0 and 1 in order to determine most efficient flight path, within terms of fuel or distance. 
+
+% Figure placement is interesting, LaTeX will try to put it where it thinks is best but it is almost always wrong.
+% [h!] tries to force it to be where you want. Failing that, just copy/paste text on either side of it.
+
+\end{document}
