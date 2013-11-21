@@ -1,4 +1,5 @@
 function plane()
+% Modeling a Boeing 727
 
     g = 9.81;        % acceleration due to gravity (m/s^2)
     m = 65000;      % mass of airplane (kg)
@@ -14,7 +15,7 @@ function plane()
     
     [TIME, Y] = ode45(@differentials, [0, 10], [initial_pos, initial_vel]);
     
-    plot(Y(:,1), Y(:,2), 'linewidth', 2);
+    plot(Y(:,1), Y(:,2));
 
     function res = differentials(t, W)
         P = W(1:2);
@@ -30,7 +31,8 @@ function plane()
         dVdt = [0; -g] + ([F_thrust*cos(pi/4);F_thrust*cos(pi/4)]/m) + ((rho*A*v^2) / (2*m)) * (C_l*s_hat - C_D*v_hat);
         
         res = [dPdt; dVdt];
-        disp(dVdt);
     end
+
+    function 
 
 end
