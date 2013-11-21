@@ -1,6 +1,6 @@
 function plane()
 
-    g = 9.8;        % acceleration due to gravity (m/s^2)
+    g = 9.81;        % acceleration due to gravity (m/s^2)
     m = 65000;      % mass of airplane (kg)
     rho = 1.3;      % density of air (kg/m^3)
     A = 330;        % cross-sectional area of plane (m^2)
