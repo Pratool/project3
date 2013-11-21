@@ -15,7 +15,7 @@ function plane()
     
     options = odeset('events', @events);
     
-    [TIME, Y] = ode45(@differentials, [0, 2000], [initial_pos, initial_vel], options);
+    [TIME, Y] = ode45(@differentials, [0, 6000], [initial_pos, initial_vel], options);
     
     plot(Y(:,1), Y(:,2));
     axis([0, 2e4, 0, 10000]);
