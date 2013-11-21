@@ -17,11 +17,11 @@ function plane()
     
     [TIME, Y] = ode45(@differentials, [0, 2000], [initial_pos, initial_vel], options);
     
-    plot(Y(:,1), Y(:,2));
-    axis([0, 2e4, 0, 10000]);
-    xlabel('Horizontal Position (m)');
-    ylabel('Vertical Position (m)');
-    title('Trajectory of Zero-Gravity Aircraft');
+%     plot(Y(:,1), Y(:,2));
+%     axis([0, 2e4, 0, 10000]);
+%     xlabel('Horizontal Position (m)');
+%     ylabel('Vertical Position (m)');
+%     title('Trajectory of Zero-Gravity Aircraft');
 
     function res = differentials(t, W)
         P = W(1:2);
@@ -32,9 +32,16 @@ function plane()
         s_hat = fliplr(v_hat);
         
         % Different ways of varying thrust
-        F_thrust = 1.75*7500000*exp(-0.139*t);
+        %F_thrust = 1.75*7500000*exp(-0.139*t);
         %F_thrust = 7500000*( cos(2*pi*t / 4));
         %F_thrust = 750000*round(1.5*cos(2*pi*t));
+        %F_thrust = 750000*round(abs(cos(2*pi*t/20)));
+        F_thrust = 750000*abs(cos(2*pi*t/20));
+        
+        disp(t);
+        disp(F_thrust);
+        hold on;
+        plot(t, F_thrust, 'o');
         
         dPdt = V;
         dVdt = [0; -g] + ([F_thrust*cos(pi/4);F_thrust*cos(pi/4)]/m) + ((rho*A*v^2) / (2*m)) * (C_l*s_hat - C_D*v_hat);
