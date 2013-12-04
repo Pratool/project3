@@ -1,14 +1,14 @@
 function plane()
 % Modeling a Boeing 727
 
-    g = 9.81;        % acceleration due to gravity (m/s^2)
+    g = 9.81;       % acceleration due to gravity (m/s^2)
     m = 65000;      % mass of airplane (kg)
     rho = 1.3;      % density of air (kg/m^3)
     A = 330;        % cross-sectional area of plane (m^2)
     C_l = 0.56;     % coefficient of lift (dimensionless)
     C_D = 0.6;      % coefficient of drag (dimensionless)
     
-    %F_thrust = 750000;
+    F_thrust = 7500000;
     
     initial_pos = [0, 0];
     initial_vel = [40, 10];
@@ -17,7 +17,7 @@ function plane()
     options2 = odeset('events', @events2);
     
     [TIME, Y] = ode45(@thrust_on, [0, 2000], [initial_pos, initial_vel], options);
-    [TIME_2, Y_2] = ode45(@thrust_off, [0, 2000], [Y(end, 1), Y(end, 2), Y(end, 3), Y(end, 4)], options2);
+    [TIME_2, Y_2] = ode45(@thrust_off, [2000, 4000], [Y(end, 1), Y(end, 2), Y(end, 3), Y(end, 4)], options2);
     
     for i = 1:3
         [TIME, Y] = ode45(@thrust_on, [0, 2000], [Y_2(end, 1), Y_2(end, 2), Y_2(end, 3), Y_2(end, 4)], options);
@@ -42,8 +42,6 @@ function plane()
         %disp(F_thrust);
         %hold on;
         %plot(t, F_thrust, 'o');
-        
-        F_thrust = 750000;
         
         dPdt = V;
         dVdt = [0; -g] + ([F_thrust*cos(pi/4);F_thrust*cos(pi/4)]/m) + ((rho*A*v^2) / (2*m)) * (C_l*s_hat - C_D*v_hat);
