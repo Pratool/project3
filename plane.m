@@ -33,7 +33,7 @@ function plane()
     end
 
     hold on;
-    disp(T);
+    disp(t);
     plot(Y(:,1), Y(:,2), 'LineWidth', 2);
     %plot(Y_2(:,1), Y_2(:,2));
     %axis([0, 2e4, 0, 10000]);
