@@ -17,6 +17,7 @@ function plane()
     options2 = odeset('events', @events2);
     
     [TIME, Y] = ode45(@thrust_on, [0, 2000], [initial_pos, initial_vel], options);
+    T(1) = TIME(end) - TIME(1);
     [TIME, Y_2] = ode45(@thrust_off, [2000, 4000], [Y(end, 1), Y(end, 2), Y(end, 3), Y(end, 4)], options2);
     
     Y = [Y; Y_2];
@@ -26,13 +27,13 @@ function plane()
     for i = 2:8
         [TIME, Y_2] = ode45(@thrust_on, [2000*i, 2000*(i+1)], [Y(end, 1), Y(end, 2), Y(end, 3), Y(end, 4)], options);
         Y = [Y; Y_2];
-        
+        T(i) = TIME(end) - TIME(1);
         [TIME, Y_2] = ode45(@thrust_off, [2000*(i+1), 2000*(i+2)], [Y(end, 1), Y(end, 2), Y(end, 3), Y(end, 4)], options2);
         Y = [Y; Y_2];
     end
 
     hold on;
-    
+    disp(T);
     plot(Y(:,1), Y(:,2));
     %plot(Y_2(:,1), Y_2(:,2));
     %axis([0, 2e4, 0, 10000]);
