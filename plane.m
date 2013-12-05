@@ -34,12 +34,12 @@ function plane()
 
     hold on;
     disp(T);
-    plot(Y(:,1), Y(:,2));
+    plot(Y(:,1), Y(:,2), 'LineWidth', 2);
     %plot(Y_2(:,1), Y_2(:,2));
     %axis([0, 2e4, 0, 10000]);
-    xlabel('Horizontal Position (m)');
-    ylabel('Vertical Position (m)');
-    title('Trajectory of Zero-Gravity Aircraft');
+    xlabel('Horizontal Position (m)', 'FontSize', 14);
+    ylabel('Vertical Position (m)', 'FontSize', 14);
+    title('Trajectory of Zero-Gravity Aircraft', 'FontSize', 18);
 
     function res = thrust_on(t, W)
         P = W(1:2);
