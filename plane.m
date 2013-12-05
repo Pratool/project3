@@ -8,7 +8,7 @@ function plane()
     C_l = 0.56;     % coefficient of lift (dimensionless)
     C_D = 0.6;      % coefficient of drag (dimensionless)
     
-    F_thrust = 7500000;
+    F_thrust = 1000000;
     
     initial_pos = [0, 0];
     initial_vel = [40, 10];
@@ -24,7 +24,7 @@ function plane()
     
     %disp(Y);
     
-    for i = 2:8
+    for i = 2:10
         [TIME, Y_2] = ode45(@thrust_on, [2000*i, 2000*(i+1)], [Y(end, 1), Y(end, 2), Y(end, 3), Y(end, 4)], options);
         Y = [Y; Y_2];
         t = t + (TIME(end) - TIME(1));
@@ -81,13 +81,13 @@ function plane()
 
     function [value, isterminal,direction] = events(t, W) % kill thrust when height is increasing
         %value = W(2) - 9756;
-        value = W(2) - 5000;
+        value = W(2) - 9000;
         direction = 1;
         isterminal = 1;
     end
 
     function [value, isterminal, direction] = events2(t, W) % when plane is too close to ground terminate
-        value = W(2) - 1000;
+        value = W(2) - 7000;
         
         direction = -1;
         isterminal = 1;
