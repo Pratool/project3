@@ -87,7 +87,7 @@ function plane()
     end
 
     function [value, isterminal, direction] = events2(t, W) % when plane is too close to ground terminate
-        value = W(2) - 7000;
+        value = W(2) - 8000;
         
         direction = -1;
         isterminal = 1;
