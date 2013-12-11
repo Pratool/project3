@@ -31,15 +31,15 @@ function punchline()
     
     %disp(Y);
     
-%     for i = 2:10
-%         [TIME, Y_2] = ode45(@thrust_on_2, [T(end), 2000*(i+1)], [Y(end, 1), Y(end, 2), Y(end, 3), Y(end, 4)], options);
-%         Y = [Y; Y_2];
-%         T = [T; TIME];
-% %         t = t + (TIME(end) - TIME(1));
-%         [TIME, Y_2] = ode45(@thrust_off, [T(end), 2000*(i+2)], [Y(end, 1), Y(end, 2), Y(end, 3), Y(end, 4)], options2);
-%         Y = [Y; Y_2];
-%         T = [T; TIME];
-%     end
+    for i = 2:10
+        [TIME, Y_2] = ode45(@thrust_on_2, [T(end), 2000*(i+1)], [Y(end, 1), Y(end, 2), Y(end, 3), Y(end, 4)], options);
+        Y = [Y; Y_2];
+        T = [T; TIME];
+%         t = t + (TIME(end) - TIME(1));
+        [TIME, Y_2] = ode45(@thrust_off, [T(end), 2000*(i+2)], [Y(end, 1), Y(end, 2), Y(end, 3), Y(end, 4)], options2);
+        Y = [Y; Y_2];
+        T = [T; TIME];
+    end
 
     clf;
     hold on;
