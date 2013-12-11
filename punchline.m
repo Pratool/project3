@@ -9,7 +9,8 @@ function punchline()
     C_D = 0.6;      % coefficient of drag (dimensionless)
     
     F_thrust = 2000000;
-    F_thrust_2 = 2800000;
+    %F_thrust_2 = 2800000;
+    F_thrust_2 = 1000000;
     initial_pos = [0, 0];
     initial_vel = [40, 10];
     
@@ -17,23 +18,27 @@ function punchline()
     options2 = odeset('events', @events2);
     
     [TIME, Y] = ode45(@thrust_on_1, [0, 2000], [initial_pos, initial_vel], options);
-%     t_1 = TIME(1);
-%     t = TIME(end) - TIME(1);
-    [TIME_2, Y_2] = ode45(@thrust_off, [TIME(end), 4000], [Y(end, 1), Y(end, 2), Y(end, 3), Y(end, 4)], options2);
+    T = TIME;
+    
+    [TIME, Y_2] = ode45(@thrust_off, [T(end), 4000], [Y(end, 1), Y(end, 2), Y(end, 3), Y(end, 4)], options2);
     Y = [Y; Y_2];
-    T = [TIME; TIME_2];
+    T = [T; TIME];
     
     disp(T(end, 1));
+    vector = ( norm( [Y_2(1, 3); Y_2(1, 4)]-[Y_2(2, 3); Y_2(2, 4)] ) ) / (TIME(2, 1)-TIME(1, 1));
     
-    [TIME_3, Y_2] = ode45(@thrust_on_2, [T(end), 4000], [Y(end, 1), Y(end, 2), Y(end, 3), Y(end, 4)], options);
+    [TIME_2, Y_2] = ode45(@thrust_on_2, [T(end), 4000], [Y(end, 1), Y(end, 2), Y(end, 3), Y(end, 4)], options);
     Y = [Y; Y_2];
-    T = [T; TIME_3];
-    disp(T(end, 1));
-    vector = ( [Y_2(1, 3); Y_2(1, 4)]-[Y_2(2, 3); Y_2(2, 4)] ) / (TIME_2(2, 1)-TIME_2(1, 1)) ;
-    acceleration = norm(vector)/9.8;
+    T = [T; TIME_2];
+    
+    disp(TIME_2(1,1));
+    disp(TIME_2(2,1));
+    
+    %vector = ( [Y_2(1, 3); Y_2(1, 4)]-[Y_2(2, 3); Y_2(2, 4)] ) / (TIME_2(2, 1)-TIME_2(1, 1)) ;
+    acceleration = (norm(vector)/9.8 - 1);
     disp(acceleration);
     
-    %disp(Y);
+%     disp(Y);
     
 %     for i = 2:10
 %         [TIME, Y_2] = ode45(@thrust_on_2, [T(end), 2000*(i+1)], [Y(end, 1), Y(end, 2), Y(end, 3), Y(end, 4)], options);
