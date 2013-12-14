@@ -17,33 +17,25 @@ function plane()
     options2 = odeset('events', @events2);
     
     [TIME, Y] = ode45(@thrust_on_1, [0, 2000], [initial_pos, initial_vel], options);
-%     t_1 = TIME(1);
-%     t = TIME(end) - TIME(1);
+    
     [TIME_2, Y_2] = ode45(@thrust_off, [TIME(end), 4000], [Y(end, 1), Y(end, 2), Y(end, 3), Y(end, 4)], options2);
     Y = [Y; Y_2];
     T = [TIME; TIME_2];
-    
-    %disp(Y);
     
     for i = 2:10
         [TIME, Y_2] = ode45(@thrust_on_2, [T(end), 2000*(i+1)], [Y(end, 1), Y(end, 2), Y(end, 3), Y(end, 4)], options);
         Y = [Y; Y_2];
         T = [T; TIME];
-%         t = t + (TIME(end) - TIME(1));
+        
         [TIME, Y_2] = ode45(@thrust_off, [T(end), 2000*(i+2)], [Y(end, 1), Y(end, 2), Y(end, 3), Y(end, 4)], options2);
         Y = [Y; Y_2];
         T = [T; TIME];
     end
-
+    
     clf;
     hold on;
     plot(T, Y(:,2), 'r', 'LineWidth', 2)
     xlabel('Time (Seconds)', 'FontSize', 14);
-    %disp(t); %time spent thrusting
-    %disp(TIME(end) - t_1); %total time of flight
-    %plot(Y(:,1), Y(:,2), 'LineWidth', 2);
-    %plot(Y_2(:,1), Y_2(:,2));
-    %axis([0, 2e4, 0, 10000]);
     %xlabel('Horizontal Position (m)', 'FontSize', 14);
     ylabel('Vertical Position (m)', 'FontSize', 14);
     title('Trajectory of Zero-Gravity Aircraft', 'FontSize', 18);
@@ -55,11 +47,6 @@ function plane()
         v = norm(V);
         v_hat = V / v;
         s_hat = fliplr(v_hat);
-        
-        %disp(t);
-        %disp(F_thrust);
-        %hold on;
-        %plot(t, F_thrust, 'o');
         
         dPdt = V;
         dVdt = [0; -g] + ([F_thrust*cos(pi/4);F_thrust*cos(pi/4)]/m) + ((rho*A*v^2) / (2*m)) * (C_l*s_hat - C_D*v_hat);
@@ -75,10 +62,8 @@ function plane()
         v_hat = V / v;
         s_hat = fliplr(v_hat);
         
-        %disp(t);
-        %disp(F_thrust);
-        %hold on;
-        %plot(t, F_thrust, 'o');
+        theta = asin(v_hat(2)/v_hat(1));    % angle of plane
+        disp(theta);
         
         dPdt = V;
         dVdt = [0; -g] + ([F_thrust_2*cos(pi/4);F_thrust_2*cos(pi/4)]/m) + ((rho*A*v^2) / (2*m)) * (C_l*s_hat - C_D*v_hat);
@@ -94,11 +79,6 @@ function plane()
         v_hat = V / v;
         s_hat = fliplr(v_hat);
         
-        %disp(t);
-        %disp(F_thrust);
-        %hold on;
-        %plot(t, F_thrust, 'o');
-        
         dPdt = V;
         dVdt = [0; -g] + ([0; 0]/m) + ((rho*A*v^2) / (2*m)) * (C_l*s_hat - C_D*v_hat);
         
@@ -107,7 +87,7 @@ function plane()
 
     function [value, isterminal,direction] = events(t, W) % kill thrust when height is increasing
         value = W(2) - 8500;
-        %value = W(2) - 9000;
+        
         direction = 1;
         isterminal = 1;
     end
@@ -118,5 +98,4 @@ function plane()
         direction = -1;
         isterminal = 1;
     end
-
 end

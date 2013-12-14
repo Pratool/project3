@@ -31,12 +31,12 @@ function punchline()
     Y = [Y; Y_2];
     T = [T; TIME_2];
     
-    disp(TIME_2(1,1));
-    disp(TIME_2(2,1));
+    %disp(TIME_2(1,1));
+    %disp(TIME_2(2,1));
     
     %vector = ( [Y_2(1, 3); Y_2(1, 4)]-[Y_2(2, 3); Y_2(2, 4)] ) / (TIME_2(2, 1)-TIME_2(1, 1)) ;
-    acceleration = (norm(vector)/9.8 - 1);
-    disp(acceleration);
+    %acceleration = (norm(vector)/9.8 - 1);
+    %disp(acceleration);
     
 %     disp(Y);
     
