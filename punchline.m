@@ -8,9 +8,19 @@ function punchline()
     C_l = 0.56;     % coefficient of lift (dimensionless)
     C_D = 0.6;      % coefficient of drag (dimensionless)
     
-    F_thrust = 2000000;
-    %F_thrust_2 = 2800000;
-    F_thrust_2 = 1000000;
+    THETAS1 = 0;
+    TIMES1 = 0;
+    ACCELERATIONS1 = 0;
+    THETAS2 = 0;
+    TIMES2 = 0;
+    ACCELERATIONS2 = 0;
+    THETAS3 = 0;
+    TIMES3 = 0;
+    ACCELERATIONS3 = 0;
+
+%     F_thrust = 2000000;
+    F_thrust = 1000000;
+    F_thrust_2 = 2800000;
     initial_pos = [0, 0];
     initial_vel = [40, 10];
     
@@ -18,50 +28,52 @@ function punchline()
     options2 = odeset('events', @events2);
     
     [TIME, Y] = ode45(@thrust_on_1, [0, 2000], [initial_pos, initial_vel], options);
-    T = TIME;
     
-    [TIME, Y_2] = ode45(@thrust_off, [T(end), 4000], [Y(end, 1), Y(end, 2), Y(end, 3), Y(end, 4)], options2);
+    [TIME_2, Y_2] = ode45(@thrust_off, [TIME(end), 4000], [Y(end, 1), Y(end, 2), Y(end, 3), Y(end, 4)], options2);
     Y = [Y; Y_2];
-    T = [T; TIME];
+    T = [TIME; TIME_2];
     
-    disp(T(end, 1));
-    vector = ( norm( [Y_2(1, 3); Y_2(1, 4)]-[Y_2(2, 3); Y_2(2, 4)] ) ) / (TIME(2, 1)-TIME(1, 1));
-    
-    [TIME_2, Y_2] = ode45(@thrust_on_2, [T(end), 4000], [Y(end, 1), Y(end, 2), Y(end, 3), Y(end, 4)], options);
-    Y = [Y; Y_2];
-    T = [T; TIME_2];
-    
-    %disp(TIME_2(1,1));
-    %disp(TIME_2(2,1));
-    
-    %vector = ( [Y_2(1, 3); Y_2(1, 4)]-[Y_2(2, 3); Y_2(2, 4)] ) / (TIME_2(2, 1)-TIME_2(1, 1)) ;
-    %acceleration = (norm(vector)/9.8 - 1);
-    %disp(acceleration);
-    
-%     disp(Y);
+    [TIME_3, Y_2] = ode45(@thrust_on_2, [T(end), 2000], [Y(end, 1), Y(end, 2), Y(end, 3), Y(end, 4)], options);
+%     Y_3 = [Y; Y_2];
+    T = [T; TIME_3];
     
 %     for i = 2:10
-%         [TIME, Y_2] = ode45(@thrust_on_2, [T(end), 2000*(i+1)], [Y(end, 1), Y(end, 2), Y(end, 3), Y(end, 4)], options);
+%         [TIME, Y_2] = ode45(@thrust_on_2, [T(end), 2000*(i+1)], [Y(end, 1), Y(end, 2), Y(end, 3), Y(end, 4), 0], options);
 %         Y = [Y; Y_2];
 %         T = [T; TIME];
-% %         t = t + (TIME(end) - TIME(1));
+%         
 %         [TIME, Y_2] = ode45(@thrust_off, [T(end), 2000*(i+2)], [Y(end, 1), Y(end, 2), Y(end, 3), Y(end, 4)], options2);
 %         Y = [Y; Y_2];
 %         T = [T; TIME];
 %     end
-
+    
     clf;
-    hold on;
-    plot(T, Y(:,2), 'r', 'LineWidth', 2)
+    hold all;
+    
+    THETAS = [ THETAS1(2:end), THETAS2(2:end) ];
+    TIMES = [ TIMES1(2:end), TIMES2(2:end) ];
+    ACCELERATIONS = ( ([ACCELERATIONS1(2:end), ACCELERATIONS2(2:end)]) / g ) - 1;
+    
+    ZeroGs = ACCELERATIONS < 1;
+    
+    T_at_ZeroGs = TIMES(ZeroGs);
+    
+    time_spent = max(T_at_ZeroGs) - min(T_at_ZeroGs);
+    
+    plot(TIMES(ZeroGs), ACCELERATIONS(ZeroGs), 'o');
+    
+%     disp(time_spent);
+    
+%     plot(TIMES, THETAS);
+    
+%    plot(T, Y(:,2), 'r', 'LineWidth', 2);
+%    plot(TIME, Y_2(:,5), 'r', 'LineWidth', 2);
     xlabel('Time (Seconds)', 'FontSize', 14);
-    %disp(t); %time spent thrusting
-    %disp(TIME(end) - t_1); %total time of flight
-    %plot(Y(:,1), Y(:,2), 'LineWidth', 2);
-    %plot(Y_2(:,1), Y_2(:,2));
-    %axis([0, 2e4, 0, 10000]);
-    %xlabel('Horizontal Position (m)', 'FontSize', 14);
-    ylabel('Vertical Position (m)', 'FontSize', 14);
+%     xlabel('Horizontal Position (m)', 'FontSize', 14);
+%     ylabel('Vertical Position (m)', 'FontSize', 14);
+    ylabel('Angle of Plane (degrees)', 'FontSize', 14);
     title('Trajectory of Zero-Gravity Aircraft', 'FontSize', 18);
+    legend('Accelerations', 'Angle off ground');
 
     function res = thrust_on_1(t, W)
         P = W(1:2);
@@ -70,11 +82,6 @@ function punchline()
         v = norm(V);
         v_hat = V / v;
         s_hat = fliplr(v_hat);
-        
-        %disp(t);
-        %disp(F_thrust);
-        %hold on;
-        %plot(t, F_thrust, 'o');
         
         dPdt = V;
         dVdt = [0; -g] + ([F_thrust*cos(pi/4);F_thrust*cos(pi/4)]/m) + ((rho*A*v^2) / (2*m)) * (C_l*s_hat - C_D*v_hat);
@@ -88,15 +95,17 @@ function punchline()
         
         v = norm(V);
         v_hat = V / v;
-        s_hat = fliplr(v_hat);
-        
-        %disp(t);
-        %disp(F_thrust);
-        %hold on;
-        %plot(t, F_thrust, 'o');
+        s_hat = fliplr(v_hat);       
         
         dPdt = V;
         dVdt = [0; -g] + ([F_thrust_2*cos(pi/4);F_thrust_2*cos(pi/4)]/m) + ((rho*A*v^2) / (2*m)) * (C_l*s_hat - C_D*v_hat);
+        
+        theta = asind(V(2,1)/V(1,1));    % angle of plane
+        THETAS1(end+1) = theta;
+        TIMES1(end+1) = t;
+        ACCELERATIONS1(end+1) = norm( g*cosd(theta) * s_hat + (-sind(theta) * dVdt(1, 1) + cosd(theta)*dVdt(2, 1) ) );
+        disp(theta);
+        disp(t);
         
         res = [dPdt; dVdt];
     end
@@ -109,20 +118,22 @@ function punchline()
         v_hat = V / v;
         s_hat = fliplr(v_hat);
         
-        %disp(t);
-        %disp(F_thrust);
-        %hold on;
-        %plot(t, F_thrust, 'o');
-        
         dPdt = V;
         dVdt = [0; -g] + ([0; 0]/m) + ((rho*A*v^2) / (2*m)) * (C_l*s_hat - C_D*v_hat);
+        
+        theta = asind(V(2,1)/V(1,1));    % angle of plane
+        THETAS2(end+1) = theta;
+        TIMES2(end+1) = t;
+        ACCELERATIONS2(end+1) = norm( g*cosd(theta) * s_hat + (-sind(theta) * dVdt(1, 1) + cosd(theta)*dVdt(2, 1) ) );
+        disp(theta);
+        disp(t);
         
         res = [dPdt; dVdt];
     end
 
     function [value, isterminal,direction] = events(t, W) % kill thrust when height is increasing
         value = W(2) - 8500;
-        %value = W(2) - 9000;
+        
         direction = 1;
         isterminal = 1;
     end
@@ -133,5 +144,4 @@ function punchline()
         direction = -1;
         isterminal = 1;
     end
-
 end
