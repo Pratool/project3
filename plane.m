@@ -18,9 +18,9 @@ function plane()
     TIMES3 = 0;
     ACCELERATIONS3 = 0;
 
-%     F_thrust = 2000000;
-    F_thrust = 1000000;
-    F_thrust_2 = 2800000;
+    F_thrust = 2000000;
+%     F_thrust_2 = 2800000;
+    F_thrust_2 = 1e6;
     initial_pos = [0, 0];
     initial_vel = [40, 10];
     
@@ -29,16 +29,16 @@ function plane()
     
     [TIME, Y] = ode45(@thrust_on_1, [0, 2000], [initial_pos, initial_vel], options);
     
-    [TIME_2, Y_2] = ode45(@thrust_off, [TIME(end), 4000], [Y(end, 1), Y(end, 2), Y(end, 3), Y(end, 4)], options2);
+    [TIME_2, Y_2] = ode45(@thrust_off, [TIME(end), 4000], [23560, 7300, 110, -182], options2);
     Y = [Y; Y_2];
     T = [TIME; TIME_2];
     
     [TIME_3, Y_2] = ode45(@thrust_on_2, [T(end), 2000], [Y(end, 1), Y(end, 2), Y(end, 3), Y(end, 4)], options);
-%     Y_3 = [Y; Y_2];
+    Y = [Y; Y_2];
     T = [T; TIME_3];
     
 %     for i = 2:10
-%         [TIME, Y_2] = ode45(@thrust_on_2, [T(end), 2000*(i+1)], [Y(end, 1), Y(end, 2), Y(end, 3), Y(end, 4), 0], options);
+%         [TIME, Y_2] = ode45(@thrust_on_2, [T(end), 2000*(i+1)], [Y(end, 1), Y(end, 2), Y(end, 3), Y(end, 4)], options);
 %         Y = [Y; Y_2];
 %         T = [T; TIME];
 %         
@@ -52,10 +52,10 @@ function plane()
     THETAS = [ THETAS1(2:end), THETAS2(2:end) ];
     TIMES = [ TIMES1(2:end), TIMES2(2:end) ];
     ACCELERATIONS = ( ([ACCELERATIONS1(2:end), ACCELERATIONS2(2:end)]) / g ) - 1;
-    plot(TIMES, ACCELERATIONS);
+%    plot(TIMES, ACCELERATIONS);
 %     plot(TIMES, THETAS);
     
-%    plot(T, Y(:,2), 'r', 'LineWidth', 2);
+    plot(Y(:,1), Y(:,2), 'r', 'LineWidth', 2);
 %    plot(TIME, Y_2(:,5), 'r', 'LineWidth', 2);
     xlabel('Time (Seconds)', 'FontSize', 14);
 %     xlabel('Horizontal Position (m)', 'FontSize', 14);
