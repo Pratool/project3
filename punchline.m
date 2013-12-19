@@ -7,7 +7,12 @@ function punchline()
     end
     
     plot(1e5*(k+13), THRUSTS, 'linewidth', 2.5);
-%     plot(THRUSTS);
+    
+    xlabel('Thrust Force (N)', 'FontSize', 14);
+
+    ylabel('Length of Time of Weightlessness (s)', 'FontSize', 14);
+    title('Trajectory of Zero-Gravity Aircraft', 'FontSize', 18);
+%     legend('Accelerations', 'Angle off ground');
 
     function time_spent = plane2(F_thrust_2)
     % Modeling a Boeing 727
@@ -27,7 +32,7 @@ function punchline()
         options = odeset('events', @events);
         options2 = odeset('events', @events2);
 
-        [TIME_2, Y_2] = ode45(@thrust_on_2, 0:0.1:20, [23560, 7300, 110, -182], options);
+        [TIME_2, Y_2] = ode45(@thrust_on_2, 0:2000, [23560, 7300, 110, -182], options);
         T = TIME_2(1:end-1);
         Y = Y_2;
         
